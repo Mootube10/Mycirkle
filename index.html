@@ -75,6 +75,12 @@
       margin: 10px auto;
       display: block;
     }
+    .loading-screen {
+      display: none;
+      text-align: center;
+      padding-top: 100px;
+      font-size: 24px;
+    }
   </style>
 </head>
 <body>
@@ -85,6 +91,10 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="password" />
     <button onclick="signUp()">Sign Up!</button>
+  </div>
+
+  <div class="loading-screen" id="loading-screen">
+    <p>Loading...</p>
   </div>
 
   <div class="container dashboard" id="dashboard-container">
@@ -111,8 +121,13 @@
 
       if (username && discord && email && password) {
         document.getElementById('signup-container').style.display = 'none';
-        document.getElementById('dashboard-container').style.display = 'block';
-        document.getElementById('greeting').textContent = `Good Evening, ${username}`;
+        document.getElementById('loading-screen').style.display = 'block';
+
+        setTimeout(() => {
+          document.getElementById('loading-screen').style.display = 'none';
+          document.getElementById('dashboard-container').style.display = 'block';
+          document.getElementById('greeting').textContent = `Good Evening, ${username}`;
+        }, 5000);
       }
     }
   </script>
