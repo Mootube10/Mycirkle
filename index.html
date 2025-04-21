@@ -118,6 +118,14 @@
     .section {
       display: none;
     }
+    .toggle-link {
+      margin-top: 10px;
+      display: block;
+      color: white;
+      text-decoration: underline;
+      cursor: pointer;
+      font-size: 16px;
+    }
   </style>
 </head>
 <body>
@@ -128,6 +136,15 @@
     <input type="email" id="email" placeholder="Email" />
     <input type="password" id="password" placeholder="password" />
     <button onclick="signUp()">Sign Up!</button>
+    <span class="toggle-link" onclick="toggleForm('login')">Already have an account? Log in</span>
+  </div>
+
+  <div class="container" id="login-container" style="display: none;">
+    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?format=webp&quality=lossless&width=1056&height=594" alt="MYCD Logo" class="logo" />
+    <input type="email" id="login-email" placeholder="Email" />
+    <input type="password" id="login-password" placeholder="password" />
+    <button onclick="login()">Log In</button>
+    <span class="toggle-link" onclick="toggleForm('signup')">Don't have an account? Sign up</span>
   </div>
 
   <div class="loading-screen" id="loading-screen">
@@ -174,14 +191,31 @@
 
       if (username && discord && email && password) {
         document.getElementById('signup-container').style.display = 'none';
-        document.getElementById('loading-screen').style.display = 'block';
-
-        setTimeout(() => {
-          document.getElementById('loading-screen').style.display = 'none';
-          document.getElementById('dashboard-container').style.display = 'block';
-          document.getElementById('greeting').textContent = `Good Evening, ${username}`;
-        }, 5000);
+        showLoading(username);
       }
+    }
+
+    function login() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+      if (email && password) {
+        document.getElementById('login-container').style.display = 'none';
+        showLoading("User");
+      }
+    }
+
+    function showLoading(name) {
+      document.getElementById('loading-screen').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('loading-screen').style.display = 'none';
+        document.getElementById('dashboard-container').style.display = 'block';
+        document.getElementById('greeting').textContent = `Good Evening, ${name}`;
+      }, 5000);
+    }
+
+    function toggleForm(form) {
+      document.getElementById('signup-container').style.display = form === 'signup' ? 'block' : 'none';
+      document.getElementById('login-container').style.display = form === 'login' ? 'block' : 'none';
     }
 
     function toggleSidebar() {
