@@ -118,52 +118,47 @@
     .section {
       display: none;
     }
-    .toggle-link {
-      margin-top: 10px;
-      display: block;
-      color: white;
-      text-decoration: underline;
-      cursor: pointer;
-      font-size: 16px;
-    }
   </style>
 </head>
 <body>
-  <div class="container" id="signup-container">
-    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?ex=6808056a&is=6806b3ea&hm=585c8e928295cee4db1f2557deb2c7573b90aa41ea72e9e3e5660fdd1b26a3fd" alt="MYCD Logo" class="logo" />
-    <input type="text" id="roblox-username" placeholder="roblox username" />
-    <input type="text" id="discord-username" placeholder="discord username" />
-    <input type="email" id="email" placeholder="Email" />
-    <input type="password" id="password" placeholder="password" />
-    <button onclick="signUp()">Sign Up!</button>
-    <span class="toggle-link" onclick="toggleForm('login')">Already have an account? Log in</span>
+  <!-- Sign Up Page -->
+  <div class="container" id="auth-container">
+    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?format=webp&quality=lossless&width=1056&height=594" alt="MYCD Logo" class="logo" />
+    <div id="signup-form">
+      <input type="text" id="roblox-username" placeholder="Roblox Username" />
+      <input type="text" id="discord-username" placeholder="Discord Username" />
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button onclick="signUp()">Sign Up</button>
+      <p><a href="#" onclick="toggleAuth(true)" style="color:white; text-decoration: underline;">Already have an account? Log In</a></p>
+    </div>
+    <div id="login-form" style="display:none;">
+      <input type="email" id="login-email" placeholder="Email" />
+      <input type="password" id="login-password" placeholder="Password" />
+      <button onclick="login()">Log In</button>
+      <p><a href="#" onclick="toggleAuth(false)" style="color:white; text-decoration: underline;">Don't have an account? Sign Up</a></p>
+    </div>
   </div>
 
-  <div class="container" id="login-container" style="display: none;">
-    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?ex=6808056a&is=6806b3ea&hm=585c8e928295cee4db1f2557deb2c7573b90aa41ea72e9e3e5660fdd1b26a3fd" alt="MYCD Logo" class="logo" />
-    <input type="email" id="login-email" placeholder="Email" />
-    <input type="password" id="login-password" placeholder="password" />
-    <button onclick="login()">Log In</button>
-    <span class="toggle-link" onclick="toggleForm('signup')">Don't have an account? Sign up</span>
-  </div>
-
+  <!-- Loading Screen -->
   <div class="loading-screen" id="loading-screen">
     <p>Loading...</p>
-    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?ex=6808056a&is=6806b3ea&hm=585c8e928295cee4db1f2557deb2c7573b90aa41ea72e9e3e5660fdd1b26a3fd&=&format=webp&quality=lossless&width=1056&height=594
-" alt="Loading animation" class="loading-gif" />
+    <img src="https://cdn.discordapp.com/attachments/1320065750538391592/1363991022719340634/Cirkle_Dev.gif" alt="Loading animation" class="loading-gif" />
   </div>
 
+  <!-- Sidebar -->
   <div id="sidebar" class="sidebar">
-    <a href="#" onclick="openSection('points')">Points & Rewards</a>
-    <a href="#" onclick="openSection('loyalty')">Loyalty Card</a>
-    <a href="#" onclick="openSection('products')">My Products</a>
-    <a href="#" onclick="openSection('faq')">FAQ</a>
-    <a href="#" onclick="openSection('account')">Account</a>
+    <a href="#" onclick="showDashboard(); openSection('points')">Points & Rewards</a>
+    <a href="#" onclick="showDashboard(); openSection('loyalty')">Loyalty Card</a>
+    <a href="#" onclick="showDashboard(); openSection('products')">My Products</a>
+    <a href="#" onclick="showDashboard(); openSection('faq')">FAQ</a>
+    <a href="#" onclick="showDashboard(); openSection('account')">Account</a>
   </div>
 
+  <!-- Dashboard -->
   <div class="container dashboard" id="dashboard-container">
     <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?ex=6808056a&is=6806b3ea&hm=585c8e928295cee4db1f2557deb2c7573b90aa41ea72e9e3e5660fdd1b26a3fd" alt="MYCD Logo" class="logo" />
+    <img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?format=webp&quality=lossless&width=1056&height=594" alt="MYCD Logo" class="logo" />
     <img src="https://tr.rbxcdn.com/f34c142d6460f9f56cbdbe4056f3f360/150/150/AvatarHeadshot/Png" alt="Avatar" class="profile-img">
     <h2 id="greeting"></h2>
     <h3>WHAT WOULD YOU LIKE TO DO TODAY?</h3>
@@ -177,13 +172,19 @@
     <div class="footer">© Cirkle Development 2024</div>
   </div>
 
-  <div id="points" class="section container"><h2>Points & Rewards</h2><p>Coming soon...</p></div>
-  <div id="loyalty" class="section container"><h2>Loyalty Card</h2><p>Coming soon...</p></div>
-  <div id="products" class="section container"><h2>My Products</h2><p>Coming soon...</p></div>
-  <div id="faq" class="section container"><h2>FAQ</h2><p>Coming soon...</p></div>
-  <div id="account" class="section container"><h2>Account</h2><p>Coming soon...</p></div>
+  <!-- Section Pages -->
+  <div id="points" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>Points & Rewards</h2><p>Earn points by chatting in Discord or purchasing Roblox items.</p></div>
+  <div id="loyalty" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>Loyalty Card</h2><p>This is your personal QR code to scan at checkout.</p></div>
+  <div id="products" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>My Products</h2><p>All your purchased items will appear here.</p></div>
+  <div id="faq" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>FAQ</h2><p>Need help? Here's where you find answers.</p></div>
+  <div id="account" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>Account</h2><p>Change your account details or linked services here.</p></div>
 
   <script>
+    function toggleAuth(showLogin) {
+      document.getElementById('signup-form').style.display = showLogin ? 'none' : 'block';
+      document.getElementById('login-form').style.display = showLogin ? 'block' : 'none';
+    }
+
     function signUp() {
       const username = document.getElementById('roblox-username').value;
       const discord = document.getElementById('discord-username').value;
@@ -191,32 +192,28 @@
       const password = document.getElementById('password').value;
 
       if (username && discord && email && password) {
-        document.getElementById('signup-container').style.display = 'none';
-        showLoading(username);
+        loadApp(username);
       }
     }
 
     function login() {
       const email = document.getElementById('login-email').value;
       const password = document.getElementById('login-password').value;
+
       if (email && password) {
-        document.getElementById('login-container').style.display = 'none';
-        showLoading("User");
+        loadApp(email.split('@')[0]);
       }
     }
 
-    function showLoading(name) {
+    function loadApp(name) {
+      document.getElementById('auth-container').style.display = 'none';
       document.getElementById('loading-screen').style.display = 'block';
+
       setTimeout(() => {
         document.getElementById('loading-screen').style.display = 'none';
         document.getElementById('dashboard-container').style.display = 'block';
         document.getElementById('greeting').textContent = `Good Evening, ${name}`;
       }, 5000);
-    }
-
-    function toggleForm(form) {
-      document.getElementById('signup-container').style.display = form === 'signup' ? 'block' : 'none';
-      document.getElementById('login-container').style.display = form === 'login' ? 'block' : 'none';
     }
 
     function toggleSidebar() {
@@ -225,10 +222,16 @@
     }
 
     function openSection(sectionId) {
-      document.getElementById('dashboard-container').style.display = 'none';
       const sections = document.querySelectorAll('.section');
       sections.forEach(section => section.style.display = 'none');
+      document.getElementById('dashboard-container').style.display = 'none';
       document.getElementById(sectionId).style.display = 'block';
+    }
+
+    function showDashboard() {
+      const sections = document.querySelectorAll('.section');
+      sections.forEach(section => section.style.display = 'none');
+      document.getElementById('dashboard-container').style.display = 'block';
     }
   </script>
 </body>
