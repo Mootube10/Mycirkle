@@ -1,1 +1,9 @@
-
+{
+  "john@example.com": {
+    "roblox_username": "JohnRBLX",
+    "discord_username": "john#1234",
+    "email": "john@example.com",
+    "password": "supersecure",
+    "points": 0
+  }
+}
