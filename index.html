@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyCirkle</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      overflow: hidden;
+    }
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    }
+    .slide {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .slide.active {
+      display: flex;
+    }
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #43a047;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 250px;
+    }
+    .black-screen {
+      background-color: black;
+      color: white;
+      font-size: 24px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+    }
+    .fade {
+      opacity: 0;
+      animation: fadeInOut 3s ease-in-out forwards;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="slide active" id="start">
+      <h1>Welcome to MyCirkle</h1>
+      <button onclick="showSlide('username')">Sign Up</button>
+      <button onclick="alert('Login coming soon!')">Login</button>
+    </div>
+
+    <div class="slide" id="username">
+      <h2>Create Username</h2>
+      <input type="text" id="inputUsername" placeholder="Enter username" />
+      <button onclick="showSlide('email')">Continue</button>
+    </div>
+
+    <div class="slide" id="email">
+      <h2>Enter Email</h2>
+      <input type="email" id="inputEmail" placeholder="Enter email" />
+      <button onclick="showSlide('password')">Continue</button>
+    </div>
+
+    <div class="slide" id="password">
+      <h2>Create Password</h2>
+      <input type="password" id="inputPassword" placeholder="Enter password" />
+      <button onclick="startSignup()">Sign Up</button>
+    </div>
+  </div>
+
+  <div class="black-screen" id="blackScreen">
+    <div id="fadeText" class="fade">Welcome to MyCirkle</div>
+  </div>
+
+  <script>
+    function showSlide(id) {
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function startSignup() {
+      document.querySelector('.container').style.display = 'none';
+      const blackScreen = document.getElementById('blackScreen');
+      const fadeText = document.getElementById('fadeText');
+      blackScreen.style.display = 'flex';
+      let messages = [
+        "Welcome to MyCirkle",
+        "We are just setting up your account",
+        "Thank you for your patience"
+      ];
+      let index = 0;
+
+      function showMessage() {
+        fadeText.textContent = messages[index];
+        fadeText.classList.remove('fade');
+        void fadeText.offsetWidth; // trigger reflow
+        fadeText.classList.add('fade');
+        index++;
+        if (index < messages.length) {
+          setTimeout(showMessage, 3000);
+        } else {
+          setTimeout(() => {
+            fadeText.innerHTML = '<div style="margin-top: 20px;">Loading... <br><br><div style="border: 6px solid #f3f3f3;border-top: 6px solid #3498db;border-radius: 50%;width: 50px;height: 50px;animation: spin 1s linear infinite;margin: 0 auto;"></div></div>';
+            fadeText.style.opacity = 1;
+            setTimeout(() => {
+              fadeText.innerHTML = '<h2 style="color:white;">Dashboard coming soon!</h2>';
+            }, 10000);
+          }, 3000);
+        }
+      }
+
+      showMessage();
+    }
+
+    // Loading animation
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes spin {0% { transform: rotate(0deg); }100% { transform: rotate(360deg); }}`;
+    document.head.appendChild(style);
+  </script>
+</body>
+</html>
