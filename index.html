@@ -7,10 +7,9 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Poppins', sans-serif;
-      background-color: #f5f7fa;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
       overflow: hidden;
-      color: #333;
     }
     .container {
       width: 100vw;
@@ -19,65 +18,41 @@
       justify-content: center;
       align-items: center;
       flex-direction: column;
-      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
     }
     .slide {
       display: none;
       flex-direction: column;
       align-items: center;
       text-align: center;
-      animation: fadeIn 0.5s ease forwards;
     }
     .slide.active {
       display: flex;
     }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
     button {
       margin: 10px;
-      padding: 14px 28px;
+      padding: 12px 24px;
       border: none;
-      background: #00897b;
-      color: #fff;
+      background-color: #4caf50;
+      color: white;
       font-size: 16px;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-      transition: 0.3s ease;
+      transition: background-color 0.3s ease;
     }
     button:hover {
-      background: #00695c;
+      background-color: #43a047;
     }
     input {
-      padding: 12px;
+      padding: 10px;
       font-size: 16px;
-      margin: 12px 0;
+      margin: 10px;
       border: 1px solid #ccc;
-      border-radius: 10px;
-      width: 260px;
-    }
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 160px);
-      gap: 20px;
-      margin: 20px;
-    }
-    .card {
-      background: #26a69a;
-      color: white;
-      padding: 20px;
-      border-radius: 14px;
-      text-align: center;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: transform 0.2s ease;
-    }
-    .card:hover {
-      transform: translateY(-4px);
+      border-radius: 8px;
+      width: 250px;
     }
     .black-screen {
-      background-color: #000;
+      background-color: black;
       color: white;
       font-size: 24px;
       justify-content: center;
@@ -96,102 +71,246 @@
       animation: fadeInOut 3s ease-in-out forwards;
     }
     @keyframes fadeInOut {
-      0%,100% { opacity: 0; }
-      20%,80% { opacity: 1; }
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
     }
-    .card-container {
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 150px);
+      gap: 20px;
+      margin: 20px;
+    }
+    .card {
+      background: #4caf50;
+      color: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .card:hover {
+      background-color: #43a047;
+    }
+    .faq-content { display: none; margin: 10px 0; }
+    .card-face {
+      font-size: 18px;
+      padding: 20px;
+      background: #3498db;
+      color: #fff;
+      border-radius: 10px;
+      margin: 10px 0;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    /* Loyalty Card Styling */
+    .loyalty-card-container {
       perspective: 1000px;
-    }
-    .loyalty-card {
       width: 320px;
       height: 200px;
-      background: linear-gradient(135deg, #00796b, #004d40);
-      color: white;
-      border-radius: 16px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      position: relative;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-      cursor: pointer;
+      margin: 20px auto;
     }
-    .card-inner {
-      position: relative;
+    .loyalty-card {
       width: 100%;
       height: 100%;
+      border-radius: 20px;
       transition: transform 0.8s;
       transform-style: preserve-3d;
+      position: relative;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
     }
-    .loyalty-card.flip .card-inner {
+    .loyalty-card.flipped {
       transform: rotateY(180deg);
     }
-    .card-front, .card-back {
+    .loyalty-card-face {
       position: absolute;
       width: 100%;
       height: 100%;
       backface-visibility: hidden;
-      border-radius: 16px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      color: white;
       padding: 20px;
-      box-sizing: border-box;
     }
-    .card-front {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    .loyalty-card-front {
+      background: linear-gradient(135deg, #4caf50, #81c784);
     }
-    .card-back {
-      background: #004d40;
+    .loyalty-card-back {
+      background: linear-gradient(135deg, #2c3e50, #34495e);
       transform: rotateY(180deg);
-      display: flex;
       flex-direction: column;
-      justify-content: center;
-      align-items: center;
+    }
+    .loyalty-card-back p {
+      margin: 5px 0;
     }
   </style>
 </head>
+
 <body>
   <div class="container">
+    <!-- Welcome -->
     <div class="slide active" id="start">
       <h1>Welcome to MyCirkle</h1>
-      <button onclick="showSlide('dashboard')">Go to Dashboard</button>
+      <button onclick="showSlide('username')">Sign Up</button>
+      <button onclick="showSlide('login')">Login</button>
     </div>
 
+    <!-- Sign Up -->
+    <div class="slide" id="username">
+      <h2>Create Username</h2>
+      <input type="text" id="inputUsername" placeholder="Enter username" />
+      <button onclick="showSlide('email')">Continue</button>
+    </div>
+
+    <div class="slide" id="email">
+      <h2>Enter Email</h2>
+      <input type="email" id="inputEmail" placeholder="Enter email" />
+      <button onclick="showSlide('password')">Continue</button>
+    </div>
+
+    <div class="slide" id="password">
+      <h2>Create Password</h2>
+      <input type="password" id="inputPassword" placeholder="Enter password" />
+      <button onclick="startSignup()">Sign Up</button>
+    </div>
+
+    <!-- Login -->
+    <div class="slide" id="login">
+      <h2>Login</h2>
+      <input type="text" id="loginUsername" placeholder="Username" />
+      <input type="password" id="loginPassword" placeholder="Password" />
+      <button onclick="attemptLogin()">Login</button>
+      <button onclick="showSlide('start')">Cancel</button>
+    </div>
+
+    <!-- Dashboard -->
     <div class="slide" id="dashboard">
-      <h1>Dashboard</h1>
+      <h1>MyCirkle Dashboard</h1>
       <div class="dashboard-grid">
-        <div class="card" onclick="showSlide('loyaltyCard')">💳 Loyalty Card</div>
+        <div class="card" onclick="showSlide('rewards')">🎁 Rewards & Points</div>
+        <div class="card" onclick="showSlide('faq')">❓ FAQ</div>
+        <div class="card" onclick="showSlide('products')">📦 My Products</div>
+        <div class="card" onclick="showSlide('account')">👤 Account Details</div>
+        <div class="card" onclick="showLoyaltyCard()">💳 Loyalty Card</div>
       </div>
+      <button onclick="logOut()">Log Out</button>
     </div>
 
+    <!-- Loyalty Card -->
     <div class="slide" id="loyaltyCard">
       <h2>Your Loyalty Card</h2>
-      <div class="card-container">
-        <div class="loyalty-card" onclick="this.classList.toggle('flip')">
-          <div class="card-inner">
-            <div class="card-front">
-              <h3>MyCirkle</h3>
-              <p>Member Name</p>
-              <p>Points: 250</p>
-            </div>
-            <div class="card-back">
-              <p>Valid Thru: 12/26</p>
-              <p>Card No: 1234 5678 9012</p>
-              <p>Contact: support@mycirkle.com</p>
+      <div class="loyalty-card-container" onclick="flipCard()">
+        <div class="loyalty-card" id="cardElement">
+          <div class="loyalty-card-face loyalty-card-front">
+            💳 Tap to View Details
+          </div>
+          <div class="loyalty-card-face loyalty-card-back">
+            <div>
+              <h3 style="margin:5px 0;">MyCirkle Member</h3>
+              <p>Name: <span id="cardUsername">John Doe</span></p>
+              <p>ID: <span id="cardID">#000123</span></p>
+              <p>Points: <span id="cardPoints">350</span></p>
             </div>
           </div>
         </div>
       </div>
-      <button onclick="showSlide('dashboard')">Back</button>
+      <button onclick="showSlide('dashboard')">Back to Dashboard</button>
+    </div>
+  </div>
+
+  <div class="black-screen" id="blackScreen">
+    <div id="fadeText" class="fade">Welcome to MyCirkle</div>
+    <div id="loader" style="display:none; margin-top:20px;">
+      <div style="border: 6px solid #f3f3f3; border-top: 6px solid #4caf50; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
     </div>
   </div>
 
   <script>
+    let userData = {};
+
     function showSlide(id) {
       document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+    }
+
+    function startSignup() {
+      userData = {
+        username: document.getElementById('inputUsername').value.trim(),
+        email: document.getElementById('inputEmail').value.trim(),
+        password: document.getElementById('inputPassword').value
+      };
+      if (!userData.username || !userData.email || !userData.password) {
+        alert("Please complete all fields.");
+        return;
+      }
+      let users = JSON.parse(localStorage.getItem('myCirkleUsers') || '[]');
+      users.push(userData);
+      localStorage.setItem('myCirkleUsers', JSON.stringify(users));
+      startWelcomeSequence();
+    }
+
+    function startWelcomeSequence() {
+      document.querySelector('.container').style.display = 'none';
+      const blackScreen = document.getElementById('blackScreen');
+      const fadeText = document.getElementById('fadeText');
+      const loader = document.getElementById('loader');
+      blackScreen.style.display = 'flex';
+      const messages = ["Welcome to MyCirkle", "We are just setting up your account", "Thank you for your patience"];
+      let index = 0;
+      function showMessage() {
+        fadeText.textContent = messages[index];
+        fadeText.classList.remove('fade'); void fadeText.offsetWidth;
+        fadeText.classList.add('fade');
+        if (index === 2) loader.style.display = 'block';
+        index++;
+        if (index < messages.length) setTimeout(showMessage, 3000);
+        else setTimeout(() => {
+          loader.style.display = 'none';
+          blackScreen.style.display = 'none';
+          document.querySelector('.container').style.display = 'flex';
+          showSlide('dashboard');
+        }, 3000);
+      }
+      showMessage();
+    }
+
+    function attemptLogin() {
+      const username = document.getElementById('loginUsername').value.trim();
+      const password = document.getElementById('loginPassword').value;
+      const users = JSON.parse(localStorage.getItem('myCirkleUsers') || '[]');
+      const match = users.find(u => u.username === username && u.password === password);
+      if (match) {
+        userData = match;
+        showSlide('dashboard');
+      } else alert("Wrong Credentials, please try again or sign up");
+    }
+
+    function logOut() {
+      document.querySelector('.container').style.display = 'none';
+      document.getElementById('loader').style.display = 'none';
+      document.getElementById('blackScreen').style.display = 'flex';
+      document.getElementById('fadeText').textContent = "Logging Out... See you next time";
+      setTimeout(() => location.reload(), 3000);
+    }
+
+    function flipCard() {
+      const card = document.getElementById('cardElement');
+      card.classList.toggle('flipped');
+    }
+
+    function showLoyaltyCard() {
+      document.getElementById('cardUsername').textContent = userData.username || "Guest";
+      document.getElementById('cardID').textContent = "#" + Math.floor(Math.random() * 999999).toString().padStart(6, '0');
+      document.getElementById('cardPoints').textContent = Math.floor(Math.random() * 500 + 50);
+      showSlide('loyaltyCard');
     }
   </script>
 </body>
