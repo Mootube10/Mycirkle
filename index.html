@@ -1,235 +1,237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyCirkle Loyalty Program</title>
-  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    .fade { animation: fadeInOut 3s ease-in-out; }
-    @keyframes fadeInOut {
-      0%,100% { opacity: 0; }
-      50% { opacity: 1; }
-    }
-    .flip-card {
-      background-color: transparent;
-      width: 300px;
-      height: 180px;
-      perspective: 1000px;
-    }
-    .flip-card-inner {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      transition: transform 0.6s;
-      transform-style: preserve-3d;
-    }
-    .flip-card:hover .flip-card-inner {
-      transform: rotateY(180deg);
-    }
-    .flip-card-front, .flip-card-back {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      backface-visibility: hidden;
-      border-radius: 20px;
-      padding: 20px;
-    }
-    .flip-card-front {
-      background: #1f1f1f;
-      color: white;
-    }
-    .flip-card-back {
-      background: #333;
-      color: white;
-      transform: rotateY(180deg);
-    }
-    /* Styling for confetti */
-    .confetti { 
-      animation: confettiAnimation 2s forwards;
-    }
-    @keyframes confettiAnimation {
-      0% { transform: scale(0); opacity: 1; }
-      100% { transform: scale(1); opacity: 0; }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>MYCD Loyalty Program</title>
+<style>
+body {
+margin: 0;
+background-color: #33697c;
+font-family: 'Arial Rounded MT Bold', sans-serif;
+color: white;
+text-align: center;
+}
+.container {
+max-width: 400px;
+margin: auto;
+padding: 20px;
+}
+.logo {
+width: 100%;
+max-width: 300px;
+margin: 20px auto;
+display: block;
+}
+input {
+width: 100%;
+padding: 15px;
+margin: 10px 0;
+border-radius: 10px;
+border: none;
+font-size: 18px;
+}
+button {
+padding: 15px;
+width: 100%;
+background-color: white;
+color: #33697c;
+border: none;
+font-size: 20px;
+border-radius: 20px;
+cursor: pointer;
+font-weight: bold;
+}
+button:hover {
+background-color: #f0f0f0;
+}
+.dashboard {
+display: none;
+}
+.menu-grid {
+display: grid;
+grid-template-columns: repeat(2, 1fr);
+gap: 20px;
+margin-top: 30px;
+}
+.menu-item {
+background: white;
+color: #33697c;
+padding: 20px;
+border-radius: 20px;
+font-weight: bold;
+text-align: center;
+font-size: 18px;
+cursor: pointer;
+}
+.footer {
+margin-top: 30px;
+font-size: 14px;
+opacity: 0.8;
+}
+.profile-img {
+width: 80px;
+height: 80px;
+border-radius: 50%;
+margin: 10px auto;
+display: block;
+}
+.loading-screen {
+display: none;
+text-align: center;
+padding-top: 100px;
+font-size: 24px;
+}
+.loading-gif {
+width: 400px;
+margin-top: 20px;
+}
+.menu-toggle {
+position: absolute;
+top: 20px;
+left: 20px;
+font-size: 30px;
+cursor: pointer;
+}
+.sidebar {
+height: 100%;
+width: 0;
+position: fixed;
+top: 0;
+left: 0;
+background-color: #2a5260;
+overflow-x: hidden;
+transition: 0.5s;
+padding-top: 60px;
+}
+.sidebar a {
+padding: 10px 30px;
+text-decoration: none;
+font-size: 20px;
+color: white;
+display: block;
+transition: 0.3s;
+}
+.sidebar a:hover {
+background-color: #3e7c94;
+}
+.section {
+display: none;
+}
+</style>
 </head>
-<body class="bg-black text-white flex flex-col items-center justify-center min-h-screen">
-  <div id="app" class="w-full max-w-2xl p-4 text-center">
-    <!-- Sign Up, Login, and Onboarding -->
-    <div id="start" class="space-y-4">
-      <h1 class="text-4xl font-bold">Welcome to MyCirkle</h1>
-      <button onclick="goToSignUp()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Sign Up</button>
-      <button onclick="goToLogin()" class="bg-gray-700 hover:bg-gray-900 text-white py-2 px-4 rounded">Login</button>
-    </div>
+<body>
+<!-- Sign Up Page -->
+<div class="container" id="auth-container">
+<img src="https://ci3.googleusercontent.com/mail-img-att/AGAZnRpmfFjuhQubXH74iLkHlZi630IfTR9YUM3wb8AbZJjKjYuAHiGGz21wjAX4-JVSo7jFf1YuyG4ZoA2XO7sfm3gj5L3Aki5KSYmAw6n4rB5wHl2pyuWwoQkvg6KpbNgZR--8BYCoSdTcjZOj_7Rbus9-1kZzEd-r0qpmi4-awb4mxbHIQPYXTPCgl9Wlee3sGo7rESGw9gnjzyFfHq_WBX7sqa-8n9WAJUNCS-rwint1UVY-wYotZgLHtftD09FOowQYvjgIhnAuRhcxMWbvqsScV4xabY1CzYgp7_A7f3lr2YTYWepfsoO8YCNss8b-rxP0j0qBzUtSDMV2WnNOdwprYlOibGYHHwIA54M5N3JoQm0o7JVYFkFwPd9GazkRTXpxXSOKVULkxHlsWw9YR3vFCFad-qpcsf5Gs4ARb9aYd_W6MftLStFrj9VcEMjQKC466ifS_wsugyVOcXWagH3E1V6FuCGVspulpFpI9s1oG8kVzhP1YKZK1VnSn-vBwrYg2bZjW4AL-mlCEy57J6hjvlRfhuok2xLhGjKNNNwR-r5C6dX06lMnsTTLeor0oDVdwwUcg-COexGGybTeVDMVyQRt3RaYkG6JZW_TUgKPwtScjgD6MSP-NLTv_AeUZRQRZyoC7bcMDsoejX-ONkGX3xT60VwVPg9TDOHknkcabrUyAk_gErrDeq15fWOUs3PSQvurkgbIyv6Db6_S-yU-UDUbMz1oC4ZSKIMzUvG6bgkxNCrU36bPtm-IcdlGQCeSon1iJqzyVE_0u3snJXv4GVB7a7OcrlJUp4nq-A9r8xCt6RJwCledelpKZSRtGjufgO1wD7_dMR3BxeEazNulS5f22nKh4hXRB9ng422V54ZEfet9oUSvWXvq_nsVsDA2z3E5AOKzEHKz-D7XRx_h8KA-ApMfnGbpSWP1kA4wCnUSuwz7DnZi7F8qCL-P6wCCUKRW8GAoA51lPMRKi3dEgqhY3zD1yDz1LSOH4f7bFWmhrrDcK4FbWvjzzggze5Dand--mxXqBmAuJspawLZ5f77jOBKgeKGdm0ZNUYJUUKkYN-7zuS2seUtKvck=s0-l75-ft/&=&format=webp&quality=lossless&width=1056&height=594?format=webp&quality=lossless&width=1056&height=594" alt="MYCD Logo" class="logo" />
+<div id="signup-form">
+<input type="text" id="roblox-username" placeholder="Roblox Username" />
+<input type="text" id="discord-username" placeholder="Discord Username" />
+<input type="email" id="email" placeholder="Email" />
+<input type="password" id="password" placeholder="Password" />
+<button onclick="signUp()">Sign Up</button>
+<p><a href="#" onclick="toggleAuth(true)" style="color:white; text-decoration: underline;">Already have an account? Log In</a></p>
+</div>
+<div id="login-form" style="display:none;">
+<input type="email" id="login-email" placeholder="Email" />
+<input type="password" id="login-password" placeholder="Password" />
+<button onclick="login()">Log In</button>
+<p><a href="#" onclick="toggleAuth(false)" style="color:white; text-decoration: underline;">Don't have an account? Sign Up</a></p>
+</div>
+</div>
 
-    <!-- Sign Up Form -->
-    <div id="signup" class="hidden space-y-4">
-      <div id="signup-step-1">
-        <p>Enter Username:</p>
-        <input id="username" type="text" class="text-black w-full p-2 rounded">
-        <button onclick="nextSignupStep(2)" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Continue</button>
-      </div>
-      <div id="signup-step-2" class="hidden">
-        <p>Enter Email:</p>
-        <input id="email" type="email" class="text-black w-full p-2 rounded">
-        <button onclick="nextSignupStep(3)" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Continue</button>
-      </div>
-      <div id="signup-step-3" class="hidden">
-        <p>Create Password:</p>
-        <input id="password" type="password" class="text-black w-full p-2 rounded">
-        <button onclick="completeSignup()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Sign Up</button>
-      </div>
-    </div>
+<!-- Loading Screen -->
+<div class="loading-screen" id="loading-screen">
+<p>Loading...</p>
+<img src="https://media.discordapp.net/attachments/1315278404009988107/1363984884766478416/mycirkle.png?ex=6808056a&is=6806b3ea&hm=585c8e928295cee4db1f2557deb2c7573b90aa41ea72e9e3e5660fdd1b26a3fd&=&format=webp&quality=lossless&width=1056&height=594" alt="Loading animation" class="loading-gif" />
+</div>
 
-    <!-- Onboarding -->
-    <div id="onboarding" class="hidden fade text-xl">
-      <p id="onboarding-text"></p>
-    </div>
+<!-- Sidebar -->
+<div id="sidebar" class="sidebar">
+<a href="#" onclick="showDashboard(); openSection('points')">Points & Rewards</a>
+<a href="#" onclick="showDashboard(); openSection('loyalty')">Loyalty Card</a>
+<a href="#" onclick="showDashboard(); openSection('products')">My Products</a>
+<a href="#" onclick="showDashboard(); openSection('faq')">FAQ</a>
+<a href="#" onclick="showDashboard(); openSection('account')">Account</a>
+</div>
 
-    <!-- Dashboard -->
-    <div id="dashboard" class="hidden grid grid-cols-2 gap-4 text-center">
-      <button onclick="goTo('rewards')" class="bg-gray-800 p-4 rounded-2xl">Rewards and Points</button>
-      <button onclick="goTo('faq')" class="bg-gray-800 p-4 rounded-2xl">FAQ</button>
-      <button onclick="goTo('products')" class="bg-gray-800 p-4 rounded-2xl">My Products</button>
-      <button onclick="goTo('account')" class="bg-gray-800 p-4 rounded-2xl">Account Details</button>
-      <button onclick="goTo('card')" class="bg-gray-800 p-4 rounded-2xl">Loyalty Card</button>
-      <button onclick="logOut()" class="col-span-2 bg-red-600 mt-4 p-2 rounded">Log Out</button>
-    </div>
+<!-- Dashboard -->
+<div class="container dashboard" id="dashboard-container">
+<span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+<img src="https://ci3.googleusercontent.com/mail-img-att/AGAZnRpmfFjuhQubXH74iLkHlZi630IfTR9YUM3wb8AbZJjKjYuAHiGGz21wjAX4-JVSo7jFf1YuyG4ZoA2XO7sfm3gj5L3Aki5KSYmAw6n4rB5wHl2pyuWwoQkvg6KpbNgZR--8BYCoSdTcjZOj_7Rbus9-1kZzEd-r0qpmi4-awb4mxbHIQPYXTPCgl9Wlee3sGo7rESGw9gnjzyFfHq_WBX7sqa-8n9WAJUNCS-rwint1UVY-wYotZgLHtftD09FOowQYvjgIhnAuRhcxMWbvqsScV4xabY1CzYgp7_A7f3lr2YTYWepfsoO8YCNss8b-rxP0j0qBzUtSDMV2WnNOdwprYlOibGYHHwIA54M5N3JoQm0o7JVYFkFwPd9GazkRTXpxXSOKVULkxHlsWw9YR3vFCFad-qpcsf5Gs4ARb9aYd_W6MftLStFrj9VcEMjQKC466ifS_wsugyVOcXWagH3E1V6FuCGVspulpFpI9s1oG8kVzhP1YKZK1VnSn-vBwrYg2bZjW4AL-mlCEy57J6hjvlRfhuok2xLhGjKNNNwR-r5C6dX06lMnsTTLeor0oDVdwwUcg-COexGGybTeVDMVyQRt3RaYkG6JZW_TUgKPwtScjgD6MSP-NLTv_AeUZRQRZyoC7bcMDsoejX-ONkGX3xT60VwVPg9TDOHknkcabrUyAk_gErrDeq15fWOUs3PSQvurkgbIyv6Db6_S-yU-UDUbMz1oC4ZSKIMzUvG6bgkxNCrU36bPtm-IcdlGQCeSon1iJqzyVE_0u3snJXv4GVB7a7OcrlJUp4nq-A9r8xCt6RJwCledelpKZSRtGjufgO1wD7_dMR3BxeEazNulS5f22nKh4hXRB9ng422V54ZEfet9oUSvWXvq_nsVsDA2z3E5AOKzEHKz-D7XRx_h8KA-ApMfnGbpSWP1kA4wCnUSuwz7DnZi7F8qCL-P6wCCUKRW8GAoA51lPMRKi3dEgqhY3zD1yDz1LSOH4f7bFWmhrrDcK4FbWvjzzggze5Dand--mxXqBmAuJspawLZ5f77jOBKgeKGdm0ZNUYJUUKkYN-7zuS2seUtKvck=s0-l75-ft?format=webp&quality=lossless&width=1056&height=594" alt="MYCD Logo" class="logo" />
+<h2 id="greeting"></h2>
+<h3>WHAT WOULD YOU LIKE TO DO TODAY?</h3>
+<div class="menu-grid">
+<div class="menu-item" onclick="openSection('points')">Points & Rewards</div>
+<div class="menu-item" onclick="openSection('loyalty')">Loyalty Card</div>
+<div class="menu-item" onclick="openSection('products')">My Products</div>
+<div class="menu-item" onclick="openSection('faq')">FAQ</div>
+<div class="menu-item" onclick="openSection('account')">Account</div>
+</div>
+<div class="footer">© Cirkle Development 2024</div>
+</div>
 
-    <!-- Rewards Page -->
-    <div id="rewards" class="hidden text-center">
-      <button onclick="goTo('dashboard')" class="bg-gray-800 p-2 rounded mb-4">Back</button>
-      <h2 class="text-2xl font-bold mb-4">Your Points: <span id="user-points">1200</span></h2>
-      <div id="chart" class="mb-4"></div>
-      <input type="number" id="target-input" class="text-black w-48 p-2 rounded" placeholder="Set New Target">
-      <button onclick="setTarget()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Set Target</button>
-      <div id="confetti" class="hidden mt-4 text-green-400 font-bold">You've just set a new target!</div>
-      <div class="mt-6 space-y-2">
-        <div class="bg-gray-700 p-4 rounded">
-          <h3>Reward 1</h3>
-          <button onclick="redeemReward(1)" class="bg-blue-500 text-white p-2 rounded">Redeem</button>
-        </div>
-        <div class="bg-gray-700 p-4 rounded">
-          <h3>Reward 2</h3>
-          <button onclick="redeemReward(2)" class="bg-blue-500 text-white p-2 rounded">Redeem</button>
-        </div>
-        <div class="bg-gray-700 p-4 rounded">
-          <h3>Reward 3</h3>
-          <button onclick="redeemReward(3)" class="bg-blue-500 text-white p-2 rounded">Redeem</button>
-        </div>
-      </div>
-    </div>
+<!-- Section Pages -->
+<div id="points" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>Points & Rewards</h2><p>Earn points by chatting in Discord or purchasing Roblox items.</p></div>
+<div id="loyalty" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>Loyalty Card</h2><p>This is your personal QR code to scan at checkout.</p></div>
+<div id="products" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>My Products</h2><p>All your purchased items will appear here.</p></div>
+<div id="faq" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>FAQ</h2><p>Need help? Here's where you find answers.</p></div>
+<div id="account" class="section container"><span class="menu-toggle" onclick="toggleSidebar()">☰</span><h2>Account</h2><p>Change your account details or linked services here.</p></div>
 
-    <!-- FAQ, Products, Account Details, and Loyalty Card pages go here (same as above) -->
+<script>
+function toggleAuth(showLogin) {
+document.getElementById('signup-form').style.display = showLogin ? 'none' : 'block';
+document.getElementById('login-form').style.display = showLogin ? 'block' : 'none';
+}
 
-  </div>
+function signUp() {
+const username = document.getElementById('roblox-username').value;
+const discord = document.getElementById('discord-username').value;
+const email = document.getElementById('email').value;
+const password = document.getElementById('password').value;
 
-  <script>
-    let userPoints = 1200;
+if (username && discord && email && password) {
+loadApp(username);
+}
+}
 
-    // Chart.js setup
-    let ctx = document.getElementById('chart').getContext('2d');
-    let chart = new Chart(ctx, {
-      type: 'pie',
-      data: {
-        labels: ['Used', 'Available'],
-        datasets: [{
-          label: 'My Points',
-          data: [200, userPoints - 200],
-          backgroundColor: ['#ff6b6b', '#4caf50'],
-        }],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: 'top',
-          },
-        },
-      },
-    });
+function login() {
+const email = document.getElementById('login-email').value;
+const password = document.getElementById('login-password').value;
 
-    // Set target function
-    function setTarget() {
-      const target = document.getElementById('target-input').value;
-      if (target) {
-        userPoints = target;
-        chart.data.datasets[0].data[1] = userPoints - 200;  // Update available points
-        chart.update();
-        document.getElementById('confetti').classList.remove('hidden');
-      }
-    }
+if (email && password) {
+loadApp(email.split('@')[0]);
+}
+}
 
-    // Reward redemption logic
-    function redeemReward(rewardId) {
-      userPoints -= 100;  // Deduct points for redemption
-      chart.data.datasets[0].data[1] = userPoints - 200;
-      chart.update();
-      alert('Reward Redeemed! Points deducted.');
-    }
+function loadApp(name) {
+document.getElementById('auth-container').style.display = 'none';
+document.getElementById('loading-screen').style.display = 'block';
 
-    // Navigation logic for pages
-    function goTo(page) {
-      document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('rewards').classList.add('hidden');
-      document.getElementById('faq').classList.add('hidden');
-      document.getElementById('products').classList.add('hidden');
-      document.getElementById('account').classList.add('hidden');
-      document.getElementById('card').classList.add('hidden');
+setTimeout(() => {
+document.getElementById('loading-screen').style.display = 'none';
+document.getElementById('dashboard-container').style.display = 'block';
+document.getElementById('greeting').textContent = `Good Evening, ${name}`;
+}, 5000);
+}
 
-      document.getElementById(page).classList.remove('hidden');
-    }
-    
-    // Log out function
-    function logOut() {
-      alert('Logging out...');
-      // Redirect to login/signup page
-      window.location.reload();
-    }
+function toggleSidebar() {
+const sidebar = document.getElementById('sidebar');
+sidebar.style.width = sidebar.style.width === '250px' ? '0' : '250px';
+}
 
-    // Sign Up and Login flow
-    function goToSignUp() {
-      document.getElementById('start').classList.add('hidden');
-      document.getElementById('signup').classList.remove('hidden');
-    }
+function openSection(sectionId) {
+const sections = document.querySelectorAll('.section');
+sections.forEach(section => section.style.display = 'none');
+document.getElementById('dashboard-container').style.display = 'none';
+document.getElementById(sectionId).style.display = 'block';
+}
 
-    function goToLogin() {
-      alert("Login is not implemented yet.");
-    }
-
-    function nextSignupStep(step) {
-      document.getElementById('signup-step-1').classList.add('hidden');
-      document.getElementById('signup-step-2').classList.add('hidden');
-      document.getElementById('signup-step-3').classList.add('hidden');
-
-      document.getElementById('signup-step-' + step).classList.remove('hidden');
-    }
-
-    function completeSignup() {
-      const username = document.getElementById('username').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      if (username && email && password) {
-        alert('Account Created! Welcome, ' + username);
-        document.getElementById('signup').classList.add('hidden');
-        document.getElementById('onboarding').classList.remove('hidden');
-        document.getElementById('onboarding-text').innerText = 'Welcome to MyCirkle. Setting up your account...';
-        setTimeout(function() {
-          document.getElementById('onboarding-text').innerText = 'Thank you for your patience!';
-          setTimeout(function() {
-            document.getElementById('onboarding').classList.add('hidden');
-            document.getElementById('dashboard').classList.remove('hidden');
-          }, 2000);
-        }, 2000);
-      } else {
-        alert("Please fill all fields.");
-      }
-    }
-  </script>
+function showDashboard() {
+const sections = document.querySelectorAll('.section');
+sections.forEach(section => section.style.display = 'none');
+document.getElementById('dashboard-container').style.display = 'block';
+}
+</script>
 </body>
 </html>
