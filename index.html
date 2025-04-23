@@ -1,133 +1,114 @@
-
-
-    <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MYCD Loyalty Program</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #33697c;
-      color: #fff;
-      text-align: center;
-    }
-    .container {
-      max-width: 480px;
-      margin: auto;
-      padding: 2rem;
-    }
-    .logo {
-      width: 100%;
-      max-width: 240px;
-      margin: 2rem auto;
-      display: block;
-    }
-    input, button {
-      width: 100%;
-      padding: 1rem;
-      margin: 0.5rem 0;
-      border-radius: 10px;
-      border: none;
-      font-size: 1rem;
-    }
-    input {
-      background-color: #fff;
-      color: #000;
-    }
-    button {
-      background-color: #fff;
-      color: #33697c;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    }
-    button:hover {
-      background-color: #f0f0f0;
-    }
-    .dashboard, .section {
-      display: none;
-    }
-    .menu-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-      gap: 1rem;
-      margin-top: 2rem;
-    }
-    .menu-item {
-      background: #fff;
-      color: #33697c;
-      padding: 1.5rem;
-      border-radius: 15px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .menu-item:hover {
-      transform: scale(1.05);
-    }
-    .footer {
-      margin-top: 2rem;
-      font-size: 0.8rem;
-      opacity: 0.7;
-    }
-    .menu-toggle {
-      position: fixed;
-      top: 1rem;
-      left: 1rem;
-      font-size: 1.5rem;
-      cursor: pointer;
-    }
-    .sidebar {
-      height: 100%;
-      width: 0;
-      position: fixed;
-      top: 0;
-      left: 0;
-      background-color: #2a5260;
-      overflow-x: hidden;
-      transition: 0.5s;
-      padding-top: 60px;
-    }
-    .sidebar a {
-      padding: 1rem 2rem;
-      text-decoration: none;
-      font-size: 1.2rem;
-      color: white;
-      display: block;
-    }
-    .sidebar a:hover {
-      background-color: #3e7c94;
-    }
-    .loading-screen {
-      display: none;
-      padding-top: 5rem;
-      font-size: 1.5rem;
-    }
-    .loading-gif {
-      width: 100%;
-      max-width: 300px;
-      margin-top: 1rem;
-    }
-    @media (min-width: 768px) {
-      .container {
-        max-width: 600px;
-      }
-      .menu-grid {
-        grid-template-columns: repeat(3, 1fr);
-      }
-    }
-  </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyCirkle Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <!-- HTML structure will go here (auth, dashboard, sidebar, etc.) -->
-  <!-- Reintegrate original structure here -->
+  <div class="sidebar">
+    <h2>MyCirkle</h2>
+    <ul>
+      <li onclick="showSection('dashboard')">Dashboard</li>
+      <li onclick="showSection('points')">Points & Rewards</li>
+      <li onclick="showSection('loyalty')">Loyalty Card</li>
+      <li onclick="showSection('products')">My Products</li>
+      <li onclick="showSection('faq')">FAQ</li>
+      <li onclick="showSection('account')">Account</li>
+    </ul>
+  </div>
+
+  <div class="main">
+    <div id="dashboard" class="section container">
+      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+      <h2>Welcome to MyCirkle</h2>
+      <p>This is your customer dashboard.</p>
+    </div>
+
+    <div id="points" class="section container">
+      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+      <h2>Points & Rewards</h2>
+      <p>Earn points by chatting in Discord or purchasing Roblox items.</p>
+      <button onclick="showDashboard()">← Back to Dashboard</button>
+    </div>
+
+    <div id="loyalty" class="section container">
+      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+      <h2>Loyalty Card</h2>
+      <p>This is your personal QR code to scan at checkout.</p>
+      <button onclick="showDashboard()">← Back to Dashboard</button>
+    </div>
+
+    <div id="products" class="section container">
+      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+      <h2>My Products</h2>
+      <p>All your purchased items will appear here.</p>
+      <button onclick="showDashboard()">← Back to Dashboard</button>
+    </div>
+
+    <div id="faq" class="section container">
+      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+      <h2>FAQ</h2>
+
+      <div>
+        <button onclick="toggleDropdown('faq1')">What are the T&C's for signing up for a MyCirkle Account</button>
+        <div id="faq1" style="display:none; margin: 10px 0;">
+          <p>The T&C's can be found by navigating to 
+            <a href="https://shop.cirkledevelopment.co.uk/mycirkle" target="_blank" style="color:white; text-decoration: underline;">this page</a> 
+            and scrolling down. Please ensure you have acknowledged these before using MyCirkle Services.
+          </p>
+        </div>
+      </div>
+
+      <div>
+        <button onclick="toggleDropdown('faq2')">What do I do if I lost my account details?</button>
+        <div id="faq2" style="display:none; margin: 10px 0;">
+          <p>Unfortunately, we cannot help you very much in this case, according to our T&C's. After all, it is your information and your responsibility to remember. 
+            You can email us at <a href="mailto:mycirkle@cirkledevelopment.co.uk" style="color:white; text-decoration: underline;">mycirkle@cirkledevelopment.co.uk</a> and we can see what we can do!</p>
+        </div>
+      </div>
+
+      <div>
+        <button onclick="toggleDropdown('faq3')">What is MyCirkle Exactly?</button>
+        <div id="faq3" style="display:none; margin: 10px 0;">
+          <p>MyCirkleDevelopment (Recognised and named as MyCirkle) is a loyalty account targeted to new and returning customers that can save them money by doing simple tasks. 
+            These tasks end up being rewarded in points, which you can redeem by heading to the "Points and Rewards" section on MyCirkle.</p>
+        </div>
+      </div>
+
+      <button onclick="showDashboard()">← Back to Dashboard</button>
+    </div>
+
+    <div id="account" class="section container">
+      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
+      <h2>Account</h2>
+      <p>Change your account details or linked services here.</p>
+      <button onclick="showDashboard()">← Back to Dashboard</button>
+    </div>
+  </div>
+
+  <script>
+    function showSection(sectionId) {
+      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+      document.getElementById(sectionId).style.display = 'block';
+    }
+
+    function showDashboard() {
+      showSection('dashboard');
+    }
+
+    function toggleSidebar() {
+      document.querySelector('.sidebar').classList.toggle('open');
+    }
+
+    function toggleDropdown(id) {
+      const dropdown = document.getElementById(id);
+      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+    }
+
+    // Show dashboard by default
+    showDashboard();
+  </script>
 </body>
 </html>
