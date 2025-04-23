@@ -48,17 +48,26 @@
       color: white;
       transform: rotateY(180deg);
     }
+    /* Styling for confetti */
+    .confetti { 
+      animation: confettiAnimation 2s forwards;
+    }
+    @keyframes confettiAnimation {
+      0% { transform: scale(0); opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
+    }
   </style>
 </head>
 <body class="bg-black text-white flex flex-col items-center justify-center min-h-screen">
   <div id="app" class="w-full max-w-2xl p-4 text-center">
+    <!-- Sign Up, Login, and Onboarding -->
     <div id="start" class="space-y-4">
       <h1 class="text-4xl font-bold">Welcome to MyCirkle</h1>
       <button onclick="goToSignUp()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Sign Up</button>
       <button onclick="goToLogin()" class="bg-gray-700 hover:bg-gray-900 text-white py-2 px-4 rounded">Login</button>
     </div>
 
-    <!-- Sign Up Slides -->
+    <!-- Sign Up Form -->
     <div id="signup" class="hidden space-y-4">
       <div id="signup-step-1">
         <p>Enter Username:</p>
@@ -92,53 +101,95 @@
       <button onclick="logOut()" class="col-span-2 bg-red-600 mt-4 p-2 rounded">Log Out</button>
     </div>
 
-    <!-- Additional sections like Rewards, FAQ, Products, etc., will go here -->
+    <!-- Rewards Page -->
+    <div id="rewards" class="hidden text-center">
+      <button onclick="goTo('dashboard')" class="bg-gray-800 p-2 rounded mb-4">Back</button>
+      <h2 class="text-2xl font-bold mb-4">Your Points: <span id="user-points">1200</span></h2>
+      <div id="chart" class="mb-4"></div>
+      <input type="number" id="target-input" class="text-black w-48 p-2 rounded" placeholder="Set New Target">
+      <button onclick="setTarget()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Set Target</button>
+      <div id="confetti" class="hidden mt-4 text-green-400 font-bold">You've just set a new target!</div>
+      <div class="mt-6 space-y-2">
+        <div class="bg-gray-700 p-4 rounded">
+          <h3>Reward 1</h3>
+          <button onclick="redeemReward(1)" class="bg-blue-500 text-white p-2 rounded">Redeem</button>
+        </div>
+        <div class="bg-gray-700 p-4 rounded">
+          <h3>Reward 2</h3>
+          <button onclick="redeemReward(2)" class="bg-blue-500 text-white p-2 rounded">Redeem</button>
+        </div>
+        <div class="bg-gray-700 p-4 rounded">
+          <h3>Reward 3</h3>
+          <button onclick="redeemReward(3)" class="bg-blue-500 text-white p-2 rounded">Redeem</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FAQ, Products, Account Details, and Loyalty Card pages go here (same as above) -->
+
   </div>
 
   <script>
-    function goToSignUp() {
-      document.getElementById('start').classList.add('hidden');
-      document.getElementById('signup').classList.remove('hidden');
+    let userPoints = 1200;
+
+    // Chart.js setup
+    let ctx = document.getElementById('chart').getContext('2d');
+    let chart = new Chart(ctx, {
+      type: 'pie',
+      data: {
+        labels: ['Used', 'Available'],
+        datasets: [{
+          label: 'My Points',
+          data: [200, userPoints - 200],
+          backgroundColor: ['#ff6b6b', '#4caf50'],
+        }],
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: 'top',
+          },
+        },
+      },
+    });
+
+    // Set target function
+    function setTarget() {
+      const target = document.getElementById('target-input').value;
+      if (target) {
+        userPoints = target;
+        chart.data.datasets[0].data[1] = userPoints - 200;  // Update available points
+        chart.update();
+        document.getElementById('confetti').classList.remove('hidden');
+      }
     }
-    function goToLogin() {
-      alert('Login functionality not implemented yet.');
+
+    // Reward redemption logic
+    function redeemReward(rewardId) {
+      userPoints -= 100;  // Deduct points for redemption
+      chart.data.datasets[0].data[1] = userPoints - 200;
+      chart.update();
+      alert('Reward Redeemed! Points deducted.');
     }
-    function nextSignupStep(step) {
-      document.querySelector(`#signup-step-${step - 1}`).classList.add('hidden');
-      document.querySelector(`#signup-step-${step}`).classList.remove('hidden');
-    }
-    function completeSignup() {
-      document.getElementById('signup').classList.add('hidden');
-      document.getElementById('onboarding').classList.remove('hidden');
-      const texts = [
-        "Welcome to MyCirkle",
-        "We are just setting up your account",
-        "Thank you for your patience"
-      ];
-      let i = 0;
-      const textElem = document.getElementById('onboarding-text');
-      const showNextText = () => {
-        if (i < texts.length) {
-          textElem.innerText = texts[i++];
-          setTimeout(showNextText, 3000);
-        } else {
-          document.getElementById('onboarding').classList.add('hidden');
-          document.getElementById('dashboard').classList.remove('hidden');
-        }
-      };
-      showNextText();
-    }
-    function goTo(section) {
-      alert(`Navigation to ${section} is not implemented yet.`);
-    }
-    function logOut() {
+
+    // Navigation logic for pages
+    function goTo(page) {
       document.getElementById('dashboard').classList.add('hidden');
-      document.getElementById('onboarding-text').innerText = "Logging Out... See you next time";
-      document.getElementById('onboarding').classList.remove('hidden');
-      setTimeout(() => {
-        document.getElementById('onboarding').classList.add('hidden');
-        document.getElementById('start').classList.remove('hidden');
-      }, 5000);
+      document.getElementById('rewards').classList.add('hidden');
+      document.getElementById('faq').classList.add('hidden');
+      document.getElementById('products').classList.add('hidden');
+      document.getElementById('account').classList.add('hidden');
+      document.getElementById('card').classList.add('hidden');
+
+      document.getElementById(page).classList.remove('hidden');
+    }
+    
+    // Log out function
+    function logOut() {
+      alert('Logging out...');
+      // Redirect to login/signup page
+      window.location.reload();
     }
   </script>
 </body>
