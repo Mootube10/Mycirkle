@@ -191,6 +191,45 @@
       // Redirect to login/signup page
       window.location.reload();
     }
+
+    // Sign Up and Login flow
+    function goToSignUp() {
+      document.getElementById('start').classList.add('hidden');
+      document.getElementById('signup').classList.remove('hidden');
+    }
+
+    function goToLogin() {
+      alert("Login is not implemented yet.");
+    }
+
+    function nextSignupStep(step) {
+      document.getElementById('signup-step-1').classList.add('hidden');
+      document.getElementById('signup-step-2').classList.add('hidden');
+      document.getElementById('signup-step-3').classList.add('hidden');
+
+      document.getElementById('signup-step-' + step).classList.remove('hidden');
+    }
+
+    function completeSignup() {
+      const username = document.getElementById('username').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      if (username && email && password) {
+        alert('Account Created! Welcome, ' + username);
+        document.getElementById('signup').classList.add('hidden');
+        document.getElementById('onboarding').classList.remove('hidden');
+        document.getElementById('onboarding-text').innerText = 'Welcome to MyCirkle. Setting up your account...';
+        setTimeout(function() {
+          document.getElementById('onboarding-text').innerText = 'Thank you for your patience!';
+          setTimeout(function() {
+            document.getElementById('onboarding').classList.add('hidden');
+            document.getElementById('dashboard').classList.remove('hidden');
+          }, 2000);
+        }, 2000);
+      } else {
+        alert("Please fill all fields.");
+      }
+    }
   </script>
 </body>
 </html>
