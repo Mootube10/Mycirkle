@@ -1,144 +1,135 @@
-<!DOCTYPE html>
+
+
+    <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MYCD Loyalty Program</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-    }
-
-    body {
       margin: 0;
-      background-color: #33697c;
+      padding: 0;
+    }
+    body {
       font-family: 'Inter', sans-serif;
-      color: white;
+      background-color: #33697c;
+      color: #fff;
+      text-align: center;
     }
-
     .container {
-      max-width: 500px;
+      max-width: 480px;
       margin: auto;
-      padding: 2rem 1rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 2rem;
     }
-
     .logo {
       width: 100%;
       max-width: 240px;
-      margin-bottom: 1.5rem;
+      margin: 2rem auto;
+      display: block;
     }
-
     input, button {
       width: 100%;
       padding: 1rem;
       margin: 0.5rem 0;
-      border-radius: 12px;
+      border-radius: 10px;
       border: none;
       font-size: 1rem;
     }
-
     input {
-      background: #f4f4f4;
-      color: #333;
+      background-color: #fff;
+      color: #000;
     }
-
     button {
-      background-color: white;
+      background-color: #fff;
       color: #33697c;
       font-weight: 700;
-      transition: background 0.3s ease;
+      cursor: pointer;
+      transition: background-color 0.3s;
     }
-
     button:hover {
-      background-color: #e6e6e6;
+      background-color: #f0f0f0;
     }
-
     .dashboard, .section {
       display: none;
     }
-
     .menu-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
       gap: 1rem;
-      width: 100%;
       margin-top: 2rem;
     }
-
     .menu-item {
-      background: white;
+      background: #fff;
       color: #33697c;
-      padding: 1.2rem;
-      border-radius: 12px;
-      font-weight: bold;
-      text-align: center;
-      font-size: 1rem;
+      padding: 1.5rem;
+      border-radius: 15px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 0.3s ease;
+      transition: transform 0.2s;
     }
-
     .menu-item:hover {
-      background: #f4f4f4;
+      transform: scale(1.05);
     }
-
     .footer {
       margin-top: 2rem;
-      font-size: 0.9rem;
+      font-size: 0.8rem;
       opacity: 0.7;
-      text-align: center;
     }
-
-    .sidebar {
-      position: fixed;
-      top: 0;
-      left: 0;
-      height: 100%;
-      width: 0;
-      background-color: #2a5260;
-      overflow-x: hidden;
-      transition: 0.3s;
-      padding-top: 60px;
-    }
-
-    .sidebar a {
-      display: block;
-      padding: 1rem 2rem;
-      color: white;
-      text-decoration: none;
-      font-size: 1rem;
-    }
-
-    .sidebar a:hover {
-      background-color: #3e7c94;
-    }
-
     .menu-toggle {
-      position: absolute;
+      position: fixed;
       top: 1rem;
       left: 1rem;
       font-size: 1.5rem;
       cursor: pointer;
     }
-
-    .section h2, .section p {
-      margin: 1rem 0;
+    .sidebar {
+      height: 100%;
+      width: 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color: #2a5260;
+      overflow-x: hidden;
+      transition: 0.5s;
+      padding-top: 60px;
     }
-
-    @media (max-width: 600px) {
+    .sidebar a {
+      padding: 1rem 2rem;
+      text-decoration: none;
+      font-size: 1.2rem;
+      color: white;
+      display: block;
+    }
+    .sidebar a:hover {
+      background-color: #3e7c94;
+    }
+    .loading-screen {
+      display: none;
+      padding-top: 5rem;
+      font-size: 1.5rem;
+    }
+    .loading-gif {
+      width: 100%;
+      max-width: 300px;
+      margin-top: 1rem;
+    }
+    @media (min-width: 768px) {
       .container {
-        padding: 1rem;
+        max-width: 600px;
+      }
+      .menu-grid {
+        grid-template-columns: repeat(3, 1fr);
       }
     }
   </style>
 </head>
 <body>
-  <!-- Your HTML content remains unchanged except for style updates -->
+  <!-- HTML structure will go here (auth, dashboard, sidebar, etc.) -->
+  <!-- Reintegrate original structure here -->
 </body>
+</html>
 </html>
 
