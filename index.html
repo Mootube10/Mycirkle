@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyCirkle</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f0f2f5;
+      overflow: hidden;
+    }
+    .container {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: linear-gradient(145deg, #ffffff, #e6e6e6);
+    }
+    .slide {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+    }
+    .slide.active {
+      display: flex;
+    }
+    button {
+      margin: 10px;
+      padding: 12px 24px;
+      border: none;
+      background-color: #4caf50;
+      color: white;
+      font-size: 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #43a047;
+    }
+    input {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      width: 250px;
+    }
+    .black-screen {
+      background-color: black;
+      color: white;
+      font-size: 24px;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: none;
+      flex-direction: column;
+    }
+    .fade {
+      opacity: 0;
+      animation: fadeInOut 3s ease-in-out forwards;
+    }
+    @keyframes fadeInOut {
+      0% { opacity: 0; }
+      20% { opacity: 1; }
+      80% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .dashboard-card {
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 20px;
+      width: 160px;
+      height: 120px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+      cursor: pointer;
+      transition: transform 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+    .dashboard-card:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="slide active" id="start">
+      <h1>Welcome to MyCirkle</h1>
+      <button onclick="showSlide('username')">Sign Up</button>
+      <button onclick="showSlide('dashboard')">Login</button>
+    </div>
+    <div class="slide" id="username">
+      <h2>Create Username</h2>
+      <input type="text" id="inputUsername" placeholder="Enter username" />
+      <button onclick="showSlide('email')">Continue</button>
+    </div>
+    <div class="slide" id="email">
+      <h2>Enter Email</h2>
+      <input type="email" id="inputEmail" placeholder="Enter email" />
+      <button onclick="showSlide('password')">Continue</button>
+    </div>
+    <div class="slide" id="password">
+      <h2>Create Password</h2>
+      <input type="password" id="inputPassword" placeholder="Enter password" />
+      <button onclick="startSignup()">Sign Up</button>
+    </div>
+  </div>
+  <div class="black-screen" id="blackScreen">
+    <div id="fadeText" class="fade">Welcome to MyCirkle</div>
+  </div>
+
+  <!-- Dashboard and new sections will be appended here -->
+
+<!-- DASHBOARD -->
+<div class="slide" id="dashboard">
+  <h2>Dashboard</h2>
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+    <div onclick="showSlide('rewards')" class="dashboard-card">🏆 Rewards and Points</div>
+    <div onclick="showSlide('faq')" class="dashboard-card">❓ FAQ</div>
+    <div onclick="showSlide('products')" class="dashboard-card">🛍 My Products</div>
+    <div onclick="showSlide('account')" class="dashboard-card">👤 Account Details</div>
+    <div onclick="showSlide('loyaltyCard')" class="dashboard-card">💳 Loyalty Card</div>
+  </div>
+  <button onclick="logOut()">Log Out</button>
+</div>
+
+<!-- Rewards Page -->
+<div class="slide" id="rewards">
+  <h2>Your Points: <span id="pointsAmount">100</span></h2>
+  <div>
+    🎯 Target: <input type="number" id="targetInput" value="200" />
+    <button onclick="saveTarget()">Save</button>
+  </div>
+  <canvas id="pieChart" width="200" height="200"></canvas>
+  <h3>Available Rewards</h3>
+  <ul>
+    <li>£5 Voucher - 100 pts <button onclick="redeemReward(100)">Redeem</button></li>
+    <li>Free Item - 150 pts <button onclick="redeemReward(150)">Redeem</button></li>
+  </ul>
+  <button onclick="showSlide('dashboard')">Back</button>
+</div>
+
+<!-- FAQ -->
+<div class="slide" id="faq">
+  <h2>FAQ</h2>
+  <details><summary>What are the T&C's of signing up to a MyCirkle Account?</summary>
+    The T&C's can be found at <a href="https://shop.cirkledevelopment.co.uk/mycirkle" target="_blank">this link</a>. Scroll down to read.
+  </details>
+  <details><summary>What if I lost my login details?</summary>
+    Please email <a href="mailto:mycirkle@cirkledevelopment.co.uk">mycirkle@cirkledevelopment.co.uk</a>. We’ll try to help.
+  </details>
+  <details><summary>What is MyCirkle?</summary>
+    A loyalty system rewarding you with points for simple tasks. Redeem via “Rewards and Points”.
+  </details>
+  <button onclick="showSlide('dashboard')">Back</button>
+</div>
+
+<!-- Products -->
+<div class="slide" id="products">
+  <h2>My Products</h2>
+  <p>Product 1 - £10</p>
+  <p>Product 2 - £15</p>
+  <hr />
+  <strong>Total Spent: £25</strong>
+  <button onclick="showSlide('dashboard')">Back</button>
+</div>
+
+<!-- Account -->
+<div class="slide" id="account">
+  <h2>Account Details</h2>
+  <p>Username: <input value="exampleUser" /></p>
+  <p>Email: <input value="example@email.com" /></p>
+  <p>Password: <input type="password" value="password123" /></p>
+  <button onclick="alert('Saved!'); showSlide('dashboard')">Save Changes</button>
+  <button onclick="showSlide('dashboard')">Back</button>
+</div>
+
+<!-- Loyalty Card -->
+<div class="slide" id="loyaltyCard">
+  <div id="card" onclick="flipCard()" style="width:300px;height:180px;perspective:1000px;">
+    <div id="cardInner" style="position:relative;width:100%;height:100%;transition:transform 0.6s;transform-style:preserve-3d;">
+      <div style="background:white;border-radius:10px;position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <p>💳 MyCirkle Loyalty</p>
+        <p>Username: exampleUser</p>
+        <p>🔳 [barcode here]</p>
+      </div>
+      <div style="background:#eee;transform:rotateY(180deg);border-radius:10px;position:absolute;width:100%;height:100%;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <p>Unique Code: 1234-5678-9012-3456-7890-1234</p>
+        <p>Email: example@email.com</p>
+      </div>
+    </div>
+  </div>
+  <button onclick="showSlide('dashboard')">Back</button>
+</div>
+
+  <script>
+    function showSlide(id) {
+      document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+    }
+
+    function startSignup() {
+      document.querySelector('.container').style.display = 'none';
+      const blackScreen = document.getElementById('blackScreen');
+      const fadeText = document.getElementById('fadeText');
+      blackScreen.style.display = 'flex';
+      let messages = [
+        "Welcome to MyCirkle",
+        "We are just setting up your account",
+        "Thank you for your patience"
+      ];
+      let index = 0;
+      function showMessage() {
+        fadeText.textContent = messages[index];
+        fadeText.classList.remove('fade');
+        void fadeText.offsetWidth;
+        fadeText.classList.add('fade');
+        index++;
+        if (index < messages.length) {
+          setTimeout(showMessage, 3000);
+        } else {
+          setTimeout(() => {
+            fadeText.innerHTML = '<div style="margin-top: 20px;">Loading... <br><br><div style="border: 6px solid #f3f3f3;border-top: 6px solid #3498db;border-radius: 50%;width: 50px;height: 50px;animation: spin 1s linear infinite;margin: 0 auto;"></div></div>';
+            fadeText.style.opacity = 1;
+            setTimeout(() => {
+              showSlide('dashboard');
+            }, 5000);
+          }, 3000);
+        }
+      }
+      showMessage();
+    }
+
+    function saveTarget() {
+      const target = document.getElementById("targetInput").value;
+      alert("🎉 You've just set a new target!");
+    }
+
+    function redeemReward(points) {
+      const rewardID = Math.floor(1000000000 + Math.random() * 9000000000);
+      alert(`Thank you for redeeming! ${points} points has been deducted from your account. Open a 'MyCirkle' ticket in the Discord Server and use '=redeem'. Your code: ${rewardID}`);
+    }
+
+    function logOut() {
+      document.body.innerHTML = \`
+        <div style="background:black;color:white;font-size:24px;display:flex;flex-direction:column;justify-content:center;align-items:center;height:100vh;">
+          Logging Out... See you next time<br><br>
+          <div style="border: 6px solid #f3f3f3; border-top: 6px solid #3498db; border-radius: 50%; width: 50px; height: 50px; animation: spin 1s linear infinite;"></div>
+        </div>
+      \`;
+      setTimeout(() => location.reload(), 5000);
+    }
+
+    function flipCard() {
+      const card = document.getElementById("cardInner");
+      card.style.transform = card.style.transform === "rotateY(180deg)" ? "rotateY(0deg)" : "rotateY(180deg)";
+    }
+  </script>
+</body>
+</html>
