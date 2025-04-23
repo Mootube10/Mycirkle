@@ -3,199 +3,94 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyCirkle Dashboard</title>
-  <link rel="stylesheet" href="style.css">
+  <title>MyCirkle Loyalty Program</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <style>
-    .signup-step {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-      animation: fadeSlide 1s ease-in-out forwards;
-    }
-    .loading-step {
-      background-color: black;
-      color: white;
-      font-size: 24px;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      text-align: center;
-    }
-    .fade {
-      opacity: 0;
-      transition: opacity 2s ease-in-out;
-    }
-    .fade.show {
-      opacity: 1;
-    }
-    @keyframes fadeSlide {
-      from { opacity: 0; transform: translateX(100%); }
-      to { opacity: 1; transform: translateX(0); }
-    }
+    /* Basic Reset */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: Arial, sans-serif; background-color: #111; color: #fff; }
+    .center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
+    button { padding: 10px 20px; margin: 10px; border: none; border-radius: 5px; background: #0f62fe; color: white; font-size: 16px; cursor: pointer; }
+    .hidden { display: none; }
+    .fade { opacity: 0; transition: opacity 2s ease-in-out; }
+    .fade.show { opacity: 1; }
+    .slide { animation: slide 0.5s forwards; }
+    @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loader { border: 4px solid #fff; border-top: 4px solid transparent; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
+    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; padding: 20px; }
+    .card { background: #222; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; transition: 0.3s; }
+    .card:hover { background: #333; }
   </style>
 </head>
 <body>
-  <div class="sidebar">
-    <h2>MyCirkle</h2>
-    <ul>
-      <li onclick="showSection('dashboard')">Dashboard</li>
-      <li onclick="showSection('points')">Points & Rewards</li>
-      <li onclick="showSection('loyalty')">Loyalty Card</li>
-      <li onclick="showSection('products')">My Products</li>
-      <li onclick="showSection('faq')">FAQ</li>
-      <li onclick="showSection('account')">Account</li>
-    </ul>
+
+<div id="start" class="center">
+  <h1>Welcome to MyCirkle</h1>
+  <button onclick="goTo('signup-step-1')">Sign Up</button>
+  <button onclick="goTo('login')">Login</button>
+</div>
+
+<div id="signup-step-1" class="center hidden slide">
+  <h2>Enter Username</h2>
+  <input id="username" type="text" placeholder="Username">
+  <button onclick="goTo('signup-step-2')">Continue</button>
+</div>
+<div id="signup-step-2" class="center hidden slide">
+  <h2>Enter Email</h2>
+  <input id="email" type="email" placeholder="Email">
+  <button onclick="goTo('signup-step-3')">Continue</button>
+</div>
+<div id="signup-step-3" class="center hidden slide">
+  <h2>Create Password</h2>
+  <input id="password" type="password" placeholder="Password">
+  <button onclick="startLoadingSequence()">Sign Up</button>
+</div>
+
+<div id="loading" class="center hidden">
+  <div id="msg1" class="fade">Welcome to MyCirkle</div>
+  <div id="msg2" class="fade">We are just setting up your account</div>
+  <div id="msg3" class="fade">Thanks for your patience</div>
+  <div id="loader" class="fade loader"></div>
+</div>
+
+<div id="dashboard" class="hidden">
+  <div style="padding: 20px; text-align: center;">
+    <h2>MyCirkle Dashboard</h2>
+    <button onclick="logout()">Log Out</button>
   </div>
-
-  <div class="main">
-    <div id="dashboard" class="section container">
-      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-      <h2>Welcome to MyCirkle</h2>
-      <p>This is your customer dashboard.</p>
-      <button onclick="startSignup()">Sign Up</button>
-    </div>
-
-    <!-- Signup Flow -->
-    <div id="signup-username" class="signup-step">
-      <h2>Enter Username</h2>
-      <input type="text" placeholder="Username">
-      <button onclick="nextStep('signup-email')">Continue</button>
-    </div>
-    <div id="signup-email" class="signup-step">
-      <h2>Enter Email</h2>
-      <input type="email" placeholder="Email">
-      <button onclick="nextStep('signup-password')">Continue</button>
-    </div>
-    <div id="signup-password" class="signup-step">
-      <h2>Create a Password</h2>
-      <input type="password" placeholder="Password">
-      <button onclick="showLoadingSequence()">Sign Up</button>
-    </div>
-
-    <div id="loading-screen" class="loading-step">
-      <div id="welcome-msg" class="fade">Welcome to My Cirkle</div>
-      <div id="setup-msg" class="fade">We are just setting up your account</div>
-      <div id="thanks-msg" class="fade">Thanks for your patience</div>
-      <div id="loader" class="fade">
-        <div style="border: 4px solid white; border-radius: 50%; width: 40px; height: 40px; border-top: 4px solid transparent; animation: spin 1s linear infinite;"></div>
-      </div>
-    </div>
-
-    <div id="points" class="section container">
-      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-      <h2>Points & Rewards</h2>
-      <p>Earn points by chatting in Discord or purchasing Roblox items.</p>
-      <button onclick="showDashboard()">← Back to Dashboard</button>
-    </div>
-
-    <div id="loyalty" class="section container">
-      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-      <h2>Loyalty Card</h2>
-      <p>This is your personal QR code to scan at checkout.</p>
-      <button onclick="showDashboard()">← Back to Dashboard</button>
-    </div>
-
-    <div id="products" class="section container">
-      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-      <h2>My Products</h2>
-      <p>All your purchased items will appear here.</p>
-      <button onclick="showDashboard()">← Back to Dashboard</button>
-    </div>
-
-    <div id="faq" class="section container">
-      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-      <h2>FAQ</h2>
-      <div>
-        <button onclick="toggleDropdown('faq1')">What are the T&C's for signing up for a MyCirkle Account</button>
-        <div id="faq1" style="display:none; margin: 10px 0;">
-          <p>The T&C's can be found by navigating to 
-            <a href="https://shop.cirkledevelopment.co.uk/mycirkle" target="_blank" style="color:white; text-decoration: underline;">this page</a> 
-            and scrolling down. Please ensure you have acknowledged these before using MyCirkle Services.
-          </p>
-        </div>
-      </div>
-
-      <div>
-        <button onclick="toggleDropdown('faq2')">What do I do if I lost my account details?</button>
-        <div id="faq2" style="display:none; margin: 10px 0;">
-          <p>Unfortunately, we cannot help you very much in this case, according to our T&C's. After all, it is your information and your responsibility to remember. 
-            You can email us at <a href="mailto:mycirkle@cirkledevelopment.co.uk" style="color:white; text-decoration: underline;">mycirkle@cirkledevelopment.co.uk</a> and we can see what we can do!</p>
-        </div>
-      </div>
-
-      <div>
-        <button onclick="toggleDropdown('faq3')">What is MyCirkle Exactly?</button>
-        <div id="faq3" style="display:none; margin: 10px 0;">
-          <p>MyCirkleDevelopment (Recognised and named as MyCirkle) is a loyalty account targeted to new and returning customers that can save them money by doing simple tasks. 
-            These tasks end up being rewarded in points, which you can redeem by heading to the "Points and Rewards" section on MyCirkle.</p>
-        </div>
-      </div>
-      <button onclick="showDashboard()">← Back to Dashboard</button>
-    </div>
-
-    <div id="account" class="section container">
-      <span class="menu-toggle" onclick="toggleSidebar()">☰</span>
-      <h2>Account</h2>
-      <p>Change your account details or linked services here.</p>
-      <button onclick="showDashboard()">← Back to Dashboard</button>
-    </div>
+  <div class="dashboard-grid">
+    <div class="card" onclick="alert('Rewards Page')">Rewards and Points</div>
+    <div class="card" onclick="alert('FAQ Page')">FAQ</div>
+    <div class="card" onclick="alert('My Products')">My Products</div>
+    <div class="card" onclick="alert('Account Details')">Account Details</div>
+    <div class="card" onclick="alert('Loyalty Card')">Loyalty Card</div>
   </div>
+</div>
 
-  <script>
-    function showSection(sectionId) {
-      document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
-      document.getElementById(sectionId).style.display = 'block';
-    }
+<script>
+  function goTo(id) {
+    document.querySelectorAll('.center, .hidden').forEach(el => el.classList.add('hidden'));
+    document.getElementById(id).classList.remove('hidden');
+  }
 
-    function showDashboard() {
-      showSection('dashboard');
-    }
+  function startLoadingSequence() {
+    goTo('loading');
+    setTimeout(() => document.getElementById('msg1').classList.add('show'), 500);
+    setTimeout(() => document.getElementById('msg1').classList.remove('show'), 3500);
+    setTimeout(() => document.getElementById('msg2').classList.add('show'), 4000);
+    setTimeout(() => document.getElementById('msg2').classList.remove('show'), 7000);
+    setTimeout(() => document.getElementById('msg3').classList.add('show'), 7500);
+    setTimeout(() => document.getElementById('msg3').classList.remove('show'), 10500);
+    setTimeout(() => document.getElementById('loader').classList.add('show'), 11000);
+    setTimeout(() => goTo('dashboard'), 21000);
+  }
 
-    function toggleSidebar() {
-      document.querySelector('.sidebar').classList.toggle('open');
-    }
+  function logout() {
+    goTo('start');
+    alert("Logging Out... See you next time");
+  }
+</script>
 
-    function toggleDropdown(id) {
-      const dropdown = document.getElementById(id);
-      dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
-    }
-
-    function startSignup() {
-      document.querySelector('.main').style.display = 'none';
-      document.getElementById('signup-username').style.display = 'flex';
-    }
-
-    function nextStep(nextId) {
-      document.querySelectorAll('.signup-step').forEach(step => step.style.display = 'none');
-      document.getElementById(nextId).style.display = 'flex';
-    }
-
-    function showLoadingSequence() {
-      document.querySelectorAll('.signup-step').forEach(step => step.style.display = 'none');
-      const loader = document.getElementById('loading-screen');
-      loader.style.display = 'flex';
-
-      setTimeout(() => document.getElementById('welcome-msg').classList.add('show'), 500);
-      setTimeout(() => document.getElementById('welcome-msg').classList.remove('show'), 3500);
-      setTimeout(() => document.getElementById('setup-msg').classList.add('show'), 4000);
-      setTimeout(() => document.getElementById('setup-msg').classList.remove('show'), 7000);
-      setTimeout(() => document.getElementById('thanks-msg').classList.add('show'), 7500);
-      setTimeout(() => document.getElementById('thanks-msg').classList.remove('show'), 10500);
-      setTimeout(() => document.getElementById('loader').classList.add('show'), 11000);
-      setTimeout(() => {
-        document.getElementById('loading-screen').style.display = 'none';
-        document.querySelector('.main').style.display = 'block';
-        showDashboard();
-      }, 16000);
-    }
-
-    // Show dashboard by default
-    showDashboard();
-  </script>
 </body>
 </html>
