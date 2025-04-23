@@ -1,96 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyCirkle Loyalty Program</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
-    /* Basic Reset */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: Arial, sans-serif; background-color: #111; color: #fff; }
-    .center { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; text-align: center; }
-    button { padding: 10px 20px; margin: 10px; border: none; border-radius: 5px; background: #0f62fe; color: white; font-size: 16px; cursor: pointer; }
-    .hidden { display: none; }
-    .fade { opacity: 0; transition: opacity 2s ease-in-out; }
-    .fade.show { opacity: 1; }
-    .slide { animation: slide 0.5s forwards; }
-    @keyframes slide { from { transform: translateX(100%); } to { transform: translateX(0); } }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loader { border: 4px solid #fff; border-top: 4px solid transparent; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin-top: 20px; }
-    .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 20px; padding: 20px; }
-    .card { background: #222; padding: 20px; border-radius: 10px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.5); cursor: pointer; transition: 0.3s; }
-    .card:hover { background: #333; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    .fade { animation: fadeInOut 3s ease-in-out; }
+    @keyframes fadeInOut {
+      0%,100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+    .flip-card {
+      background-color: transparent;
+      width: 300px;
+      height: 180px;
+      perspective: 1000px;
+    }
+    .flip-card-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transition: transform 0.6s;
+      transform-style: preserve-3d;
+    }
+    .flip-card:hover .flip-card-inner {
+      transform: rotateY(180deg);
+    }
+    .flip-card-front, .flip-card-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: 20px;
+      padding: 20px;
+    }
+    .flip-card-front {
+      background: #1f1f1f;
+      color: white;
+    }
+    .flip-card-back {
+      background: #333;
+      color: white;
+      transform: rotateY(180deg);
+    }
   </style>
 </head>
-<body>
+<body class="bg-black text-white flex flex-col items-center justify-center min-h-screen">
+  <div id="app" class="w-full max-w-2xl p-4 text-center">
+    <div id="start" class="space-y-4">
+      <h1 class="text-4xl font-bold">Welcome to MyCirkle</h1>
+      <button onclick="goToSignUp()" class="bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded">Sign Up</button>
+      <button onclick="goToLogin()" class="bg-gray-700 hover:bg-gray-900 text-white py-2 px-4 rounded">Login</button>
+    </div>
 
-<div id="start" class="center">
-  <h1>Welcome to MyCirkle</h1>
-  <button onclick="goTo('signup-step-1')">Sign Up</button>
-  <button onclick="goTo('login')">Login</button>
-</div>
+    <!-- Sign Up Slides -->
+    <div id="signup" class="hidden space-y-4">
+      <div id="signup-step-1">
+        <p>Enter Username:</p>
+        <input id="username" type="text" class="text-black w-full p-2 rounded">
+        <button onclick="nextSignupStep(2)" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Continue</button>
+      </div>
+      <div id="signup-step-2" class="hidden">
+        <p>Enter Email:</p>
+        <input id="email" type="email" class="text-black w-full p-2 rounded">
+        <button onclick="nextSignupStep(3)" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Continue</button>
+      </div>
+      <div id="signup-step-3" class="hidden">
+        <p>Create Password:</p>
+        <input id="password" type="password" class="text-black w-full p-2 rounded">
+        <button onclick="completeSignup()" class="mt-2 bg-blue-500 text-white px-4 py-2 rounded">Sign Up</button>
+      </div>
+    </div>
 
-<div id="signup-step-1" class="center hidden slide">
-  <h2>Enter Username</h2>
-  <input id="username" type="text" placeholder="Username">
-  <button onclick="goTo('signup-step-2')">Continue</button>
-</div>
-<div id="signup-step-2" class="center hidden slide">
-  <h2>Enter Email</h2>
-  <input id="email" type="email" placeholder="Email">
-  <button onclick="goTo('signup-step-3')">Continue</button>
-</div>
-<div id="signup-step-3" class="center hidden slide">
-  <h2>Create Password</h2>
-  <input id="password" type="password" placeholder="Password">
-  <button onclick="startLoadingSequence()">Sign Up</button>
-</div>
+    <!-- Onboarding -->
+    <div id="onboarding" class="hidden fade text-xl">
+      <p id="onboarding-text"></p>
+    </div>
 
-<div id="loading" class="center hidden">
-  <div id="msg1" class="fade">Welcome to MyCirkle</div>
-  <div id="msg2" class="fade">We are just setting up your account</div>
-  <div id="msg3" class="fade">Thanks for your patience</div>
-  <div id="loader" class="fade loader"></div>
-</div>
+    <!-- Dashboard -->
+    <div id="dashboard" class="hidden grid grid-cols-2 gap-4 text-center">
+      <button onclick="goTo('rewards')" class="bg-gray-800 p-4 rounded-2xl">Rewards and Points</button>
+      <button onclick="goTo('faq')" class="bg-gray-800 p-4 rounded-2xl">FAQ</button>
+      <button onclick="goTo('products')" class="bg-gray-800 p-4 rounded-2xl">My Products</button>
+      <button onclick="goTo('account')" class="bg-gray-800 p-4 rounded-2xl">Account Details</button>
+      <button onclick="goTo('card')" class="bg-gray-800 p-4 rounded-2xl">Loyalty Card</button>
+      <button onclick="logOut()" class="col-span-2 bg-red-600 mt-4 p-2 rounded">Log Out</button>
+    </div>
 
-<div id="dashboard" class="hidden">
-  <div style="padding: 20px; text-align: center;">
-    <h2>MyCirkle Dashboard</h2>
-    <button onclick="logout()">Log Out</button>
+    <!-- Additional sections like Rewards, FAQ, Products, etc., will go here -->
   </div>
-  <div class="dashboard-grid">
-    <div class="card" onclick="alert('Rewards Page')">Rewards and Points</div>
-    <div class="card" onclick="alert('FAQ Page')">FAQ</div>
-    <div class="card" onclick="alert('My Products')">My Products</div>
-    <div class="card" onclick="alert('Account Details')">Account Details</div>
-    <div class="card" onclick="alert('Loyalty Card')">Loyalty Card</div>
-  </div>
-</div>
 
-<script>
-  function goTo(id) {
-    document.querySelectorAll('.center, .hidden').forEach(el => el.classList.add('hidden'));
-    document.getElementById(id).classList.remove('hidden');
-  }
-
-  function startLoadingSequence() {
-    goTo('loading');
-    setTimeout(() => document.getElementById('msg1').classList.add('show'), 500);
-    setTimeout(() => document.getElementById('msg1').classList.remove('show'), 3500);
-    setTimeout(() => document.getElementById('msg2').classList.add('show'), 4000);
-    setTimeout(() => document.getElementById('msg2').classList.remove('show'), 7000);
-    setTimeout(() => document.getElementById('msg3').classList.add('show'), 7500);
-    setTimeout(() => document.getElementById('msg3').classList.remove('show'), 10500);
-    setTimeout(() => document.getElementById('loader').classList.add('show'), 11000);
-    setTimeout(() => goTo('dashboard'), 21000);
-  }
-
-  function logout() {
-    goTo('start');
-    alert("Logging Out... See you next time");
-  }
-</script>
-
+  <script>
+    function goToSignUp() {
+      document.getElementById('start').classList.add('hidden');
+      document.getElementById('signup').classList.remove('hidden');
+    }
+    function goToLogin() {
+      alert('Login functionality not implemented yet.');
+    }
+    function nextSignupStep(step) {
+      document.querySelector(`#signup-step-${step - 1}`).classList.add('hidden');
+      document.querySelector(`#signup-step-${step}`).classList.remove('hidden');
+    }
+    function completeSignup() {
+      document.getElementById('signup').classList.add('hidden');
+      document.getElementById('onboarding').classList.remove('hidden');
+      const texts = [
+        "Welcome to MyCirkle",
+        "We are just setting up your account",
+        "Thank you for your patience"
+      ];
+      let i = 0;
+      const textElem = document.getElementById('onboarding-text');
+      const showNextText = () => {
+        if (i < texts.length) {
+          textElem.innerText = texts[i++];
+          setTimeout(showNextText, 3000);
+        } else {
+          document.getElementById('onboarding').classList.add('hidden');
+          document.getElementById('dashboard').classList.remove('hidden');
+        }
+      };
+      showNextText();
+    }
+    function goTo(section) {
+      alert(`Navigation to ${section} is not implemented yet.`);
+    }
+    function logOut() {
+      document.getElementById('dashboard').classList.add('hidden');
+      document.getElementById('onboarding-text').innerText = "Logging Out... See you next time";
+      document.getElementById('onboarding').classList.remove('hidden');
+      setTimeout(() => {
+        document.getElementById('onboarding').classList.add('hidden');
+        document.getElementById('start').classList.remove('hidden');
+      }, 5000);
+    }
+  </script>
 </body>
 </html>
